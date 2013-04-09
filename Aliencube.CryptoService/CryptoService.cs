@@ -1,0 +1,206 @@
+﻿using System;
+using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using Aliencube.CryptoService.Exceptions;
+using KeyNotFoundException = Aliencube.CryptoService.Exceptions.KeyNotFoundException;
+
+namespace Aliencube.CryptoService
+{
+	/// <summary>
+	/// This represents a crypto-service entity that provides either one-way encryption or two-way encryption/decryption service for text.
+	/// </summary>
+	public class CryptoService
+	{
+		#region Constructors
+		/// <summary>
+		/// Initialises a new instance of the CryptoService object.
+		/// </summary>
+		/// <param name="key"></param>
+		public CryptoService(string key = null)
+		{
+			this.Key = key;
+			this.Vector = GetVectorFromKey(key);
+		}
+		#endregion
+
+		#region Properties
+		/// <summary>
+		/// Gets or sets the key for encryption or decryption.
+		/// </summary>
+		public string Key { get; set; }
+
+		/// <summary>
+		/// Gets or sets the initialisation vector for encryption or decryption.
+		/// </summary>
+		public string Vector { get; set; }
+		#endregion
+
+		#region Methods - Utilities
+		/// <summary>
+		/// Gets the initialisation vector value computed from the key.
+		/// </summary>
+		/// <param name="key">Passphrase.</param>
+		/// <returns>Returns the vector value computed from the key.</returns>
+		private static string GetVectorFromKey(string key)
+		{
+			var vector = String.Empty;
+			var chars = key.ToCharArray();
+			for (var i = 0; i < chars.Length; i = i + 2)
+				vector += chars[i];
+			return vector;
+		}
+
+		/// <summary>
+		/// Generates the random string.
+		/// </summary>
+		/// <param name="value">Seed.</param>
+		/// <param name="maxLength">Maxinum length of the string generated.</param>
+		/// <returns>Returns the random string.</returns>
+		public static string GenerateRandomCode(int value = 0, int maxLength = 32)
+		{
+			var keyLower = "abcdefghijklmnopqrstuvwxyz";
+			var keyUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			var keyNumber = "0123456789";
+			var keys = (keyLower + keyUpper + keyNumber).ToCharArray();
+
+			string code = null;
+			var random = value > 0 ? new Random(value) : new Random();
+			for (var i = 0; i < maxLength; i++)
+				code += keys[random.Next(keys.Length)];
+			return code;
+		}
+		#endregion
+
+		#region Methods - One-way Encryption
+		/// <summary>
+		/// Hashes the value.
+		/// </summary>
+		/// <param name="value">Value to hash.</param>
+		/// <returns>Returns the value hashed.</returns>
+		public static string GetHash(string value)
+		{
+			var hashed = String.Empty;
+			var buffer = Encoding.UTF8.GetBytes(value);
+
+			using (var sha512 = new SHA512CryptoServiceProvider())
+			{
+				var computed = sha512.ComputeHash(buffer);
+				hashed = Convert.ToBase64String(computed);
+			}
+			return hashed;
+		}
+
+		/// <summary>
+		/// Validates whether the hashed value is equal to the unhashed value.
+		/// </summary>
+		/// <param name="hashed">Hashed value.</param>
+		/// <param name="unhashed">Unhashed value.</param>
+		/// <returns>Returns <c>True</c>, if both are equal to each other; otherwise returns <c>False</c>.</returns>
+		public static bool ValidateHash(string hashed, string unhashed)
+		{
+			var validated = hashed == GetHash(unhashed);
+			return validated;
+		}
+		#endregion
+
+		#region Methods - Two-way Encyription and Decryption
+		/// <summary>
+		/// Encrypts the value.
+		/// </summary>
+		/// <param name="value">Value to encrypt.</param>
+		/// <returns>Returns the value encrypted. If there is an error while transforming the value, it returns <c>String.Empty</c>, instead of throwing an exception.</returns>
+		public string Encrypt(string value)
+		{
+			string encrypted;
+			try
+			{
+				encrypted = this.Transform(value, CryptoDirection.Encrypt);
+			}
+			catch
+			{
+				encrypted = String.Empty;
+			}
+			return encrypted;
+		}
+
+		/// <summary>
+		/// Decrypts the value.
+		/// </summary>
+		/// <param name="value">Value to decrypt.</param>
+		/// <returns>Returns the value decrypted. If there is an error while transforming the value, it returns <c>String.Empty</c>, instead of throwing an exception.</returns>
+		public string Decrypt(string value)
+		{
+			string decrypted;
+			try
+			{
+				decrypted = this.Transform(value, CryptoDirection.Decrypt);
+			}
+			catch
+			{
+				decrypted = String.Empty;
+			}
+			return decrypted;
+		}
+
+		/// <summary>
+		/// Transforms the value.
+		/// </summary>
+		/// <param name="value">Value to transform.</param>
+		/// <param name="direction">Direction to transform.</param>
+		/// <exception cref="KeyNotFoundException">Thrown when the key is not declared.</exception>
+		/// <exception cref="VectorNotFoundException">Thrown when the initialisation vector is not declared.</exception>
+		/// <exception cref="InvalidFormatException">Thrown when either key or vector does not have a proper length.</exception>
+		/// <exception cref="ValueNotFoundException">Thrown when the value to transform is NULL or empty.</exception>
+		/// <returns>Returns the value transformed.</returns>
+		public string Transform(string value, CryptoDirection direction)
+		{
+			if (String.IsNullOrWhiteSpace(this.Key))
+				throw new KeyNotFoundException("Key has not been defined.");
+			if (this.Key.Length != 32)
+				throw new InvalidFormatException("Invalid key format.");
+			if (String.IsNullOrWhiteSpace(this.Vector))
+				throw new VectorNotFoundException("Vector has not been defined.");
+			if (this.Vector.Length != 16)
+				throw new InvalidFormatException("Invalid vector format.");
+			if (String.IsNullOrWhiteSpace(value))
+				throw new ValueNotFoundException("Value is NULL or empty.");
+
+			string transformed;
+			using (var aes = new AesManaged())
+			{
+				aes.Key = Encoding.UTF8.GetBytes(this.Key);
+				aes.IV = Encoding.UTF8.GetBytes(this.Vector);
+
+				var buffer = direction == CryptoDirection.Encrypt
+								 ? Encoding.UTF8.GetBytes(value)
+								 : Convert.FromBase64String(value);
+				var transform = direction == CryptoDirection.Encrypt
+									? aes.CreateEncryptor(aes.Key, aes.IV)
+									: aes.CreateDecryptor(aes.Key, aes.IV);
+
+				using (var ms = direction == CryptoDirection.Encrypt ? new MemoryStream() : new MemoryStream(buffer))
+				using (var cs = new CryptoStream(ms, transform, direction == CryptoDirection.Encrypt
+																	? CryptoStreamMode.Write
+																	: CryptoStreamMode.Read))
+				{
+					if (direction == CryptoDirection.Encrypt)
+					{
+						cs.Write(buffer, 0, buffer.Length);
+						cs.FlushFinalBlock();
+						transformed = Convert.ToBase64String(ms.ToArray());
+					}
+					else
+					{
+						using (var sr = new StreamReader(cs))
+						{
+							transformed = sr.ReadToEnd();
+						}
+					}
+				}
+			}
+			return transformed;
+		}
+		#endregion
+	}
+}
