@@ -57,7 +57,7 @@ namespace Aliencube.CryptoService
 		/// <param name="value">Seed.</param>
 		/// <param name="maxLength">Maxinum length of the string generated.</param>
 		/// <returns>Returns the random string.</returns>
-		public static string GenerateRandomCode(int value = 0, int maxLength = 32)
+		public static string GenerateRandomCode(long value = 0, int maxLength = 32)
 		{
 			var keyLower = "abcdefghijklmnopqrstuvwxyz";
 			var keyUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -65,7 +65,7 @@ namespace Aliencube.CryptoService
 			var keys = (keyLower + keyUpper + keyNumber).ToCharArray();
 
 			string code = null;
-			var random = value > 0 ? new Random(value) : new Random();
+			var random = value > 0 ? new Random(unchecked((int)value)) : new Random();
 			for (var i = 0; i < maxLength; i++)
 				code += keys[random.Next(keys.Length)];
 			return code;
