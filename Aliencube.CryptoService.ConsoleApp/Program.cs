@@ -102,7 +102,7 @@ namespace Aliencube.CryptoService.ConsoleApp
 			if (args.Count(p => !p.StartsWith("/")) > 0)
 				throw new ArgumentException("Invalid arguments");
 
-			var direction = CryptoDirection.Hash;
+			var direction = CryptoDirection.Unknown;
 			var text = String.Empty;
 			var filepath = String.Empty;
 			var outputpath = String.Empty;

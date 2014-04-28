@@ -39,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HashProvider.cs" />
+    <Compile Include="HashService.cs" />
     <Compile Include="CryptoDirection.cs" />
     <Compile Include="CryptoService.cs" />
     <Compile Include="Exceptions\InvalidFormatException.cs" />
     <Compile Include="Exceptions\ValueNotFoundException.cs" />
     <Compile Include="Exceptions\VectorNotFoundException.cs" />
     <Compile Include="Exceptions\KeyNotFoundException.cs" />
+    <Compile Include="Interfaces\IHashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
