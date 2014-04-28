@@ -50,13 +50,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="..\..\Documents\Properties\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CryptoServiceTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Aliencube.CryptoService\Aliencube.CryptoService.csproj">
+    <ProjectReference Include="..\CryptoService\CryptoService.csproj">
       <Project>{e7cee460-2222-49c2-a402-510a5f354da6}</Project>
-      <Name>Aliencube.CryptoService</Name>
+      <Name>CryptoService</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
