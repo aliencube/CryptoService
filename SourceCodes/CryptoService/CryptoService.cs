@@ -7,26 +7,43 @@ using KeyNotFoundException = Aliencube.CryptoService.Exceptions.KeyNotFoundExcep
 
 namespace Aliencube.CryptoService
 {
+    public enum CryptionProvider
+    {
+        None = 0,
+    }
+
     /// <summary>
     /// This represents a crypto-service entity that provides either one-way encryption or two-way encryption/decryption service for text.
     /// </summary>
     public class CryptoService
     {
-        #region Constructors
+        private readonly CryptionProvider _cryptoProvider;
 
         /// <summary>
-        /// Initialises a new instance of the CryptoService object.
+        /// Initialises a new instance of the CryptoService class.
         /// </summary>
-        /// <param name="key">Passphrase.</param>
-        public CryptoService(string key = null)
+        /// <param name="provider">Cryption service provider name.</param>
+        /// <param name="key">Passphrase key.</param>
+        /// <param name="vector">Passphrase vector.</param>
+        public CryptoService(string provider, string key = null, string vector = null)
         {
+            this._cryptoProvider = this.GetCryptoProvider(provider);
             this.Key = key;
-            this.Vector = GetVectorFromKey(key);
+            this.Vector = !String.IsNullOrWhiteSpace(vector) ? vector : this.GetVectorFromKey(key);
         }
 
-        #endregion Constructors
-
-        #region Properties
+        /// <summary>
+        /// Initialises a new instance of the CryptoService class.
+        /// </summary>
+        /// <param name="provider">Cryption service provider name.</param>
+        /// <param name="key">Passphrase key.</param>
+        /// <param name="vector">Passphrase vector.</param>
+        public CryptoService(CryptionProvider provider, string key = null, string vector = null)
+        {
+            this._cryptoProvider = provider;
+            this.Key = key;
+            this.Vector = !String.IsNullOrWhiteSpace(vector) ? vector : this.GetVectorFromKey(key);
+        }
 
         /// <summary>
         /// Gets or sets the key for encryption or decryption.
@@ -38,16 +55,24 @@ namespace Aliencube.CryptoService
         /// </summary>
         public string Vector { get; set; }
 
-        #endregion Properties
-
-        #region Methods - Utilities
+        /// <summary>
+        /// Gets the cryption provider.
+        /// </summary>
+        /// <param name="provider">Cryption service provider name.</param>
+        /// <returns>Returns the hash provider.</returns>
+        private CryptionProvider GetCryptoProvider(string provider)
+        {
+            CryptionProvider result;
+            var cryptoProvider = Enum.TryParse(provider, true, out result) ? result : CryptionProvider.None;
+            return cryptoProvider;
+        }
 
         /// <summary>
         /// Gets the initialisation vector value computed from the key.
         /// </summary>
         /// <param name="key">Passphrase.</param>
         /// <returns>Returns the vector value computed from the key.</returns>
-        private static string GetVectorFromKey(string key)
+        private string GetVectorFromKey(string key)
         {
             var vector = String.Empty;
             var chars = key.ToCharArray();
@@ -75,10 +100,6 @@ namespace Aliencube.CryptoService
                 code += keys[random.Next(keys.Length)];
             return code;
         }
-
-        #endregion Methods - Utilities
-
-        #region Methods - Two-way Encyription and Decryption
 
         /// <summary>
         /// Encrypts the value.
@@ -176,7 +197,5 @@ namespace Aliencube.CryptoService
             }
             return transformed;
         }
-
-        #endregion Methods - Two-way Encyription and Decryption
     }
 }
