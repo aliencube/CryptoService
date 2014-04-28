@@ -15,7 +15,7 @@ namespace Aliencube.CryptoService
         private const string KEY_NUMBER = "0123456789";
         private const string KEY_SPECIAL = "`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
 
-        private readonly HashAlgorithm _hashAlgorithm;
+        private readonly HashProvider _hashProvider;
         private bool _disposed;
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Aliencube.CryptoService
         /// <param name="provider">Hash service provider name.</param>
         public HashService(string provider)
         {
-            this._hashAlgorithm = this.GetHashAlgorithm(provider);
+            this._hashProvider = this.GetHashProvider(provider);
         }
 
         /// <summary>
@@ -33,19 +33,35 @@ namespace Aliencube.CryptoService
         /// <param name="provider">Hash service provider name.</param>
         public HashService(HashProvider provider)
         {
-            this._hashAlgorithm = this.GetHashAlgorithm(provider);
+            this._hashProvider = provider;
+        }
+
+        private HashAlgorithm _hashAlgorithm;
+
+        /// <summary>
+        /// Gets the hash algorithm.
+        /// </summary>
+        private HashAlgorithm HashAlgorithm
+        {
+            get
+            {
+                if (this._hashAlgorithm == null)
+                    this._hashAlgorithm = this.GetHashAlgorithm(this._hashProvider);
+
+                return this._hashAlgorithm;
+            }
         }
 
         /// <summary>
-        /// Gets the hash algorithm instance.
+        /// Gets the hash provider.
         /// </summary>
         /// <param name="provider">Hash service provider name.</param>
-        /// <returns>Returns the hash algorithm instance.</returns>
-        private HashAlgorithm GetHashAlgorithm(string provider)
+        /// <returns>Returns the hash provider.</returns>
+        private HashProvider GetHashProvider(string provider)
         {
             HashProvider result;
             var hashProvider = Enum.TryParse(provider, true, out result) ? result : HashProvider.None;
-            return this.GetHashAlgorithm(hashProvider);
+            return hashProvider;
         }
 
         /// <summary>
@@ -96,7 +112,7 @@ namespace Aliencube.CryptoService
             {
                 var buffer = new byte[length];
                 rng.GetBytes(buffer);
-                code = Convert.ToBase64String(buffer).Remove(length);
+                code = Convert.ToBase64String(buffer).Replace("/", "").Replace("+", "").Remove(length);
             }
             return code;
         }
@@ -109,7 +125,7 @@ namespace Aliencube.CryptoService
         public string Hash(string value)
         {
             var buffer = Encoding.UTF8.GetBytes(value);
-            var computed = this._hashAlgorithm.ComputeHash(buffer);
+            var computed = this.HashAlgorithm.ComputeHash(buffer);
             var hashed = Convert.ToBase64String(computed);
             return hashed;
         }
@@ -134,7 +150,9 @@ namespace Aliencube.CryptoService
             if (this._disposed)
                 return;
 
-            this._hashAlgorithm.Dispose();
+            if (this._hashAlgorithm != null)
+                this._hashAlgorithm.Dispose();
+
             this._disposed = true;
         }
     }
