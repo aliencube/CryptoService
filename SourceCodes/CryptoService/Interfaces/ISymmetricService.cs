@@ -1,7 +1,20 @@
 namespace Aliencube.CryptoService.Interfaces
 {
+    /// <summary>
+    /// This provides interfaces to the SymmetricService class.
+    /// </summary>
     public interface ISymmetricService : ICryptoServiceBase
     {
+        /// <summary>
+        /// Gets or sets the key for encryption or decryption.
+        /// </summary>
+        string Key { get; set; }
+
+        /// <summary>
+        /// Gets or sets the initialisation vector for encryption or decryption.
+        /// </summary>
+        string Vector { get; set; }
+
         /// <summary>
         /// Encrypts the value.
         /// </summary>

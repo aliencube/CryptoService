@@ -20,26 +20,18 @@ namespace Aliencube.CryptoService
         /// Initialises a new instance of the SymmetricService class.
         /// </summary>
         /// <param name="provider">Cryption service provider name.</param>
-        /// <param name="key">Passphrase key.</param>
-        /// <param name="vector">Passphrase vector.</param>
-        public SymmetricService(string provider, string key = null, string vector = null)
+        public SymmetricService(string provider)
         {
             this._symmetricProvider = this.GetSymmetricProvider(provider);
-            this.Key = key;
-            this.Vector = !String.IsNullOrWhiteSpace(vector) ? vector : this.GetVectorFromKey(key);
         }
 
         /// <summary>
         /// Initialises a new instance of the SymmetricService class.
         /// </summary>
         /// <param name="provider">Cryption service provider name.</param>
-        /// <param name="key">Passphrase key.</param>
-        /// <param name="vector">Passphrase vector.</param>
-        public SymmetricService(SymmetricProvider provider, string key = null, string vector = null)
+        public SymmetricService(SymmetricProvider provider)
         {
             this._symmetricProvider = provider;
-            this.Key = key;
-            this.Vector = !String.IsNullOrWhiteSpace(vector) ? vector : this.GetVectorFromKey(key);
         }
 
         private SymmetricAlgorithm _symmetricAlgorithm;
@@ -58,15 +50,39 @@ namespace Aliencube.CryptoService
             }
         }
 
+        private string _key;
+
         /// <summary>
         /// Gets or sets the key for encryption or decryption.
         /// </summary>
-        private string Key { get; set; }
+        public string Key
+        {
+            get { return this._key; }
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value) && this.SymmetricAlgorithm.Key.Length != value.Length)
+                    throw new InvalidDataLengthException(String.Format("Key must be length of {0}", this.SymmetricAlgorithm.Key.Length));
+
+                this._key = value;
+            }
+        }
+
+        private string _vector;
 
         /// <summary>
         /// Gets or sets the initialisation vector for encryption or decryption.
         /// </summary>
-        private string Vector { get; set; }
+        public string Vector
+        {
+            get { return this._vector; }
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value) && this.SymmetricAlgorithm.IV.Length != value.Length)
+                    throw new InvalidDataLengthException(String.Format("Vector must be length of {0}", this.SymmetricAlgorithm.IV.Length));
+
+                this._vector = value;
+            }
+        }
 
         /// <summary>
         /// Gets the cryption provider.
@@ -122,24 +138,6 @@ namespace Aliencube.CryptoService
         }
 
         /// <summary>
-        /// Gets the initialisation vector value computed from the key.
-        /// </summary>
-        /// <param name="key">Passphrase.</param>
-        /// <returns>Returns the vector value computed from the key.</returns>
-        /// <exception cref="ArgumentNullException">Thrown when the key is not provided.</exception>
-        private string GetVectorFromKey(string key)
-        {
-            if (String.IsNullOrWhiteSpace(key))
-                throw new ArgumentNullException("key");
-
-            var vector = String.Empty;
-            var chars = key.ToCharArray();
-            for (var i = 0; i < chars.Length; i = i + 2)
-                vector += chars[i];
-            return vector;
-        }
-
-        /// <summary>
         /// Encrypts the value.
         /// </summary>
         /// <param name="value">Value to encrypt.</param>
@@ -192,7 +190,6 @@ namespace Aliencube.CryptoService
         /// <param name="direction">Direction to transform.</param>
         /// <returns>Returns the value transformed.</returns>
         /// <exception cref="PropertyValueNotDefinedException">Thrown when the either key or vector is not declared.</exception>
-        /// <exception cref="InvalidDataLengthException">Thrown when either key or vector does not have a proper length.</exception>
         /// <exception cref="ArgumentNullException">Thrown when the value to transform is NULL or empty.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the <c>CryptoDirection</c> is neither <c>Encrypt</c> nor <c>Decrypt</c>.</exception>
         public override string Transform(string value, CryptoDirection direction)
@@ -200,14 +197,8 @@ namespace Aliencube.CryptoService
             if (String.IsNullOrWhiteSpace(this.Key))
                 throw new PropertyValueNotDefinedException("Key has not been defined.");
 
-            if (this.Key.Length != 32)
-                throw new InvalidDataLengthException("Invalid key format.");
-
             if (String.IsNullOrWhiteSpace(this.Vector))
                 throw new PropertyValueNotDefinedException("Vector has not been defined.");
-
-            if (this.Vector.Length != 16)
-                throw new InvalidDataLengthException("Invalid vector format.");
 
             if (String.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException("value");

@@ -35,37 +35,37 @@ namespace Aliencube.CryptoService.UnitTests
         [TestCase("sha384", true)]
         [TestCase("sha512", true)]
         [TestCase("other", false)]
-        public void GetHashAlgorithm_GivenHashProvider_ReturnHashAlgorithm(string hashProvider, bool expected)
+        public void GetHashAlgorithm_GivenHashProvider_ReturnHashAlgorithm(string provider, bool expected)
         {
-            this._hashService = new HashService(hashProvider);
+            this._hashService = new HashService(provider);
             var type = this._hashService.GetType();
             var pi = type.GetProperty("HashAlgorithm", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
             Assert.IsNotNull(pi);
 
-            HashAlgorithm hashAlgorithm = null;
-            switch (hashProvider)
+            HashAlgorithm algorithm = null;
+            switch (provider)
             {
                 case "md5":
-                    hashAlgorithm = pi.GetValue(this._hashService) as MD5CryptoServiceProvider;
+                    algorithm = pi.GetValue(this._hashService) as MD5CryptoServiceProvider;
                     break;
 
                 case "sha1":
-                    hashAlgorithm = pi.GetValue(this._hashService) as SHA1CryptoServiceProvider;
+                    algorithm = pi.GetValue(this._hashService) as SHA1CryptoServiceProvider;
                     break;
 
                 case "sha256":
-                    hashAlgorithm = pi.GetValue(this._hashService) as SHA256CryptoServiceProvider;
+                    algorithm = pi.GetValue(this._hashService) as SHA256CryptoServiceProvider;
                     break;
 
                 case "sha384":
-                    hashAlgorithm = pi.GetValue(this._hashService) as SHA384CryptoServiceProvider;
+                    algorithm = pi.GetValue(this._hashService) as SHA384CryptoServiceProvider;
                     break;
 
                 case "sha512":
-                    hashAlgorithm = pi.GetValue(this._hashService) as SHA512CryptoServiceProvider;
+                    algorithm = pi.GetValue(this._hashService) as SHA512CryptoServiceProvider;
                     break;
             }
-            Assert.AreEqual(expected, hashAlgorithm != null);
+            Assert.AreEqual(expected, algorithm != null);
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Aliencube.CryptoService.UnitTests
         public void GetRandomString_GivenLength_ReturnRandomString(int length)
         {
             this._hashService = new HashService("sha256");
-            var result = this._hashService.GenerateRandomString(length);
+            var result = this._hashService.GenerateHash(length);
 
             Assert.IsTrue(!String.IsNullOrWhiteSpace(result));
             Assert.AreEqual(length, result.Length);

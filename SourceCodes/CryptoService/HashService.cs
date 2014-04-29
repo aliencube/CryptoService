@@ -1,6 +1,7 @@
 ﻿using Aliencube.CryptoService.Interfaces;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -103,6 +104,29 @@ namespace Aliencube.CryptoService
                     throw new InvalidEnumArgumentException("Invalid HashProvider is provided");
             }
             return algorithm;
+        }
+
+        /// <summary>
+        /// Generates the hashed string.
+        /// </summary>
+        /// <param name="length">Length of the string generated.</param>
+        /// <returns>Returns the hashed string.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the length value is less than or equal to 0.</exception>
+        public string GenerateHash(int length = 32)
+        {
+            if (length <= 0)
+                throw new ArgumentOutOfRangeException("length");
+
+            string code;
+            using (var rng = new RNGCryptoServiceProvider())
+            {
+                var buffer = new byte[length];
+                rng.GetBytes(buffer);
+                code = String.Join("", Convert.ToBase64String(buffer)
+                                              .Where(p => !(new[] { '/', '+' }).Contains(p))
+                                              .Take(length));
+            }
+            return code;
         }
 
         /// <summary>

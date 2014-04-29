@@ -6,6 +6,13 @@
     public interface IHashService : ICryptoServiceBase
     {
         /// <summary>
+        /// Generates the hashed string.
+        /// </summary>
+        /// <param name="length">Length of the string generated.</param>
+        /// <returns>Returns the hashed string.</returns>
+        string GenerateHash(int length = 32);
+
+        /// <summary>
         /// Hashes the value.
         /// </summary>
         /// <param name="value">Value to hash.</param>

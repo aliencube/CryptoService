@@ -8,13 +8,6 @@ namespace Aliencube.CryptoService.Interfaces
     public interface ICryptoServiceBase : IDisposable
     {
         /// <summary>
-        /// Generates the random string.
-        /// </summary>
-        /// <param name="length">Length of the string generated.</param>
-        /// <returns>Returns the random string.</returns>
-        string GenerateRandomString(int length = 32);
-
-        /// <summary>
         /// Transforms the value.
         /// </summary>
         /// <param name="value">Value to transform.</param>
