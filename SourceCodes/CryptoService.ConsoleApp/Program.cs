@@ -137,7 +137,7 @@ namespace Aliencube.CryptoService.ConsoleApp
 				}
 			}
 
-			var service = new CryptoService(key);
+			var service = new SymmetricService(key);
 			var sb = new StringBuilder();
 			if (!String.IsNullOrWhiteSpace(text) &&
 			    (String.IsNullOrWhiteSpace(filepath) || String.IsNullOrWhiteSpace(outputpath)))

@@ -42,14 +42,16 @@
     <Compile Include="..\..\Documents\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CryptoServiceBase.cs" />
+    <Compile Include="Interfaces\ICryptoServiceBase.cs" />
+    <Compile Include="Interfaces\ISymmetricService.cs" />
+    <Compile Include="SymmetricProvider.cs" />
     <Compile Include="HashProvider.cs" />
     <Compile Include="HashService.cs" />
     <Compile Include="CryptoDirection.cs" />
-    <Compile Include="CryptoService.cs" />
-    <Compile Include="Exceptions\InvalidFormatException.cs" />
-    <Compile Include="Exceptions\ValueNotFoundException.cs" />
-    <Compile Include="Exceptions\VectorNotFoundException.cs" />
-    <Compile Include="Exceptions\KeyNotFoundException.cs" />
+    <Compile Include="SymmetricService.cs" />
+    <Compile Include="Exceptions\InvalidDataLengthException.cs" />
+    <Compile Include="Exceptions\PropertyValueNotDefinedException.cs" />
     <Compile Include="Interfaces\IHashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,19 +1,10 @@
-﻿using System;
-
-namespace Aliencube.CryptoService.Interfaces
+﻿namespace Aliencube.CryptoService.Interfaces
 {
     /// <summary>
     /// This provides interfaces to the HashService class.
     /// </summary>
-    public interface IHashService : IDisposable
+    public interface IHashService : ICryptoServiceBase
     {
-        /// <summary>
-        /// Generates the random string.
-        /// </summary>
-        /// <param name="length">Length of the string generated.</param>
-        /// <returns>Returns the random string.</returns>
-        string GenerateRandomString(int length = 32);
-
         /// <summary>
         /// Hashes the value.
         /// </summary>

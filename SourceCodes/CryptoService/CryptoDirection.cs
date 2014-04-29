@@ -11,13 +11,18 @@
         Unknown = 0,
 
         /// <summary>
+        /// Indicates that one-way "Hash" is performed.
+        /// </summary>
+        Hash = 1,
+
+        /// <summary>
         /// Indicates that two-way "Encrypt" is performed.
         /// </summary>
-        Encrypt = 1,
+        Encrypt = 2,
 
         /// <summary>
         /// Indicates that two-way "Decrypt" is performed.
         /// </summary>
-        Decrypt = 2
+        Decrypt = 3
     }
 }

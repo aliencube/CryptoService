@@ -1,5 +1,6 @@
 ﻿using Aliencube.CryptoService.Interfaces;
 using System;
+using System.ComponentModel;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -8,13 +9,8 @@ namespace Aliencube.CryptoService
     /// <summary>
     /// This represents a hash service entity that provides the one-way encryption service for text.
     /// </summary>
-    public class HashService : IHashService
+    public class HashService : CryptoServiceBase, IHashService
     {
-        private const string KEY_LOWER = "abcdefghijklmnopqrstuvwxyz";
-        private const string KEY_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private const string KEY_NUMBER = "0123456789";
-        private const string KEY_SPECIAL = "`~!@#$%^&*()-_=+[{]}\\|;:'\",<.>/?";
-
         private readonly HashProvider _hashProvider;
         private bool _disposed;
 
@@ -22,8 +18,12 @@ namespace Aliencube.CryptoService
         /// Initialises a new instance of the HashService class.
         /// </summary>
         /// <param name="provider">Hash service provider name.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the provider value is not provided.</exception>
         public HashService(string provider)
         {
+            if (String.IsNullOrWhiteSpace(provider))
+                throw new ArgumentNullException("provider");
+
             this._hashProvider = this.GetHashProvider(provider);
         }
 
@@ -57,8 +57,12 @@ namespace Aliencube.CryptoService
         /// </summary>
         /// <param name="provider">Hash service provider name.</param>
         /// <returns>Returns the hash provider.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the provider value is not provided.</exception>
         private HashProvider GetHashProvider(string provider)
         {
+            if (String.IsNullOrWhiteSpace(provider))
+                throw new ArgumentNullException("provider");
+
             HashProvider result;
             var hashProvider = Enum.TryParse(provider, true, out result) ? result : HashProvider.None;
             return hashProvider;
@@ -69,6 +73,7 @@ namespace Aliencube.CryptoService
         /// </summary>
         /// <param name="provider">Hash service provider name.</param>
         /// <returns>Returns the hash algorithm instance.</returns>
+        /// <exception cref="InvalidEnumArgumentException">Thrown when the <c>HashProvider</c> is <c>None</c>.</exception>
         private HashAlgorithm GetHashAlgorithm(HashProvider provider)
         {
             HashAlgorithm algorithm;
@@ -95,26 +100,9 @@ namespace Aliencube.CryptoService
                     break;
 
                 default:
-                    throw new InvalidOperationException("No hash provider is provided");
+                    throw new InvalidEnumArgumentException("Invalid HashProvider is provided");
             }
             return algorithm;
-        }
-
-        /// <summary>
-        /// Generates the random string.
-        /// </summary>
-        /// <param name="length">Length of the string generated.</param>
-        /// <returns>Returns the random string.</returns>
-        public string GenerateRandomString(int length = 32)
-        {
-            string code;
-            using (var rng = new RNGCryptoServiceProvider())
-            {
-                var buffer = new byte[length];
-                rng.GetBytes(buffer);
-                code = Convert.ToBase64String(buffer).Replace("/", "").Replace("+", "").Remove(length);
-            }
-            return code;
         }
 
         /// <summary>
@@ -122,12 +110,13 @@ namespace Aliencube.CryptoService
         /// </summary>
         /// <param name="value">Value to hash.</param>
         /// <returns>Returns the value hashed.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the value is not provided.</exception>
         public string Hash(string value)
         {
-            var buffer = Encoding.UTF8.GetBytes(value);
-            var computed = this.HashAlgorithm.ComputeHash(buffer);
-            var hashed = Convert.ToBase64String(computed);
-            return hashed;
+            if (String.IsNullOrWhiteSpace(value))
+                throw new ArgumentNullException("value");
+
+            return this.Transform(value, CryptoDirection.Hash);
         }
 
         /// <summary>
@@ -136,17 +125,49 @@ namespace Aliencube.CryptoService
         /// <param name="hashed">Hashed text value.</param>
         /// <param name="plainText">Unhashed plain text value.</param>
         /// <returns>Returns <c>True</c>, if both are equal to each other; otherwise returns <c>False</c>.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when either hashed value or plain text value is not provided.</exception>
         public bool ValidateHashedStrings(string hashed, string plainText)
         {
+            if (String.IsNullOrWhiteSpace(hashed))
+                throw new ArgumentNullException("hashed");
+
+            if (String.IsNullOrWhiteSpace(plainText))
+                throw new ArgumentNullException("plainText");
+
             var validated = hashed == this.Hash(plainText);
             return validated;
         }
 
         /// <summary>
+        /// Transforms the value.
+        /// </summary>
+        /// <param name="value">Value to transform.</param>
+        /// <param name="direction">Direction to transform.</param>
+        /// <returns>Returns the value transformed.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the value to transform is not provided.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when the <c>CryptoDirection</c> is not <c>Hash</c>.</exception>
+        public override string Transform(string value, CryptoDirection direction)
+        {
+            if (String.IsNullOrWhiteSpace(value))
+                throw new ArgumentNullException("value");
+
+            if (direction != CryptoDirection.Hash)
+                throw new InvalidEnumArgumentException("Only CryptoDirection.Hash is accepted");
+
+            var buffer = Encoding.UTF8.GetBytes(value);
+            var computed = this.HashAlgorithm.ComputeHash(buffer);
+            var hashed = Convert.ToBase64String(computed);
+
+            return hashed;
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
+
             if (this._disposed)
                 return;
 
