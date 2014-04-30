@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="CryptoService : This library provides one-way hash and two-way encryption and decryption services." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>CryptoService</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/aliencube/CryptoService">View on GitHub</a>
+
+          <h1 id="project_title">CryptoService</h1>
+          <h2 id="project_tagline">This library provides one-way hash and two-way encryption and decryption services.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/aliencube/CryptoService/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/aliencube/CryptoService/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="cryptoservice" class="anchor" href="#cryptoservice"><span class="octicon octicon-link"></span></a>CryptoService</h1>
+
+<p><strong>CryptoService</strong> provides one-way hash and two-way encryption and decryption services.</p>
+
+<h2>
+<a name="prerequisites" class="anchor" href="#prerequisites"><span class="octicon octicon-link"></span></a>Prerequisites</h2>
+
+<p><strong>CryptoService</strong> requires the following to be installed on your box depending on your purpose of use:</p>
+
+<ul>
+<li><a href="http://www.microsoft.com/en-us/download/details.aspx?id=30653">Micrisoft .NET Framework 4.5</a></li>
+</ul><h2>
+<a name="download-builds" class="anchor" href="#download-builds"><span class="octicon octicon-link"></span></a>Download Builds</h2>
+
+<p>Download pre-built application and library are available at this <a href="http://aliencube.github.io/CryptoService/downloads.html">download page</a>.</p>
+
+<h2>
+<a name="getting-started--console-application" class="anchor" href="#getting-started--console-application"><span class="octicon octicon-link"></span></a>Getting Started – Console Application</h2>
+
+<p>In order to run <strong>CryptoService</strong> console app, a configuration file – <code>Aliencube.CryptoService.ConsoleApp.exe.config</code> – must be setup beforehand.</p>
+
+<h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<pre><code>AlienCryptoService.exe (/e|/d) /m:"TEXT" [/f:FILENAME] [/o:FILENAME]
+</code></pre>
+
+<h3>
+<a name="parameters" class="anchor" href="#parameters"><span class="octicon octicon-link"></span></a>Parameters</h3>
+
+<pre><code>/e             Encrypt the text or text file.
+/d             Decrypt the text or text file.
+/t:"[TEXT]"    Text to encrypt or decrypt. It must be enclosed by double quotes.
+/f:[FILENAME]  Filename containing text to encrypt or decrypt.
+/o:[FILENAME]  Filename to store text encrypted or decrypted.
+</code></pre>
+
+<p><strong>NOTE: <code>/e</code> and <code>/d</code> cannot be used at the same time.</strong></p>
+
+<h2>
+<a name="getting-started--cryptoservice-library" class="anchor" href="#getting-started--cryptoservice-library"><span class="octicon octicon-link"></span></a>Getting Started – CryptoService Library</h2>
+
+<p>In order to use <strong>CryptoService</strong> in your applications, simply copy <code>Aliencube.CryptoService.dll</code> to the application's <code>/bin</code> directory or reference <code>Aliencube.CryptoService.dll</code> to your application project.</p>
+
+<h3>
+<a name="hash-service" class="anchor" href="#hash-service"><span class="octicon octicon-link"></span></a>Hash Service</h3>
+
+<p>.NET framework provides five different hash algorithms, <code>MD5</code>, <code>SHA1</code>, <code>SHA256</code>, <code>SHA384</code> and <code>SHA512</code>. <strong>CryptoService</strong> supports all those hash algorithms.</p>
+
+<div class="highlight highlight-c#"><pre><span class="kt">var</span> <span class="n">provider</span> <span class="p">=</span> <span class="n">HashProvider</span><span class="p">.</span><span class="n">SHA256</span>           <span class="c1">// Sets the hash algorithm to SHA256</span>
+<span class="kt">var</span> <span class="n">hashService</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HashService</span><span class="p">(</span><span class="n">provider</span><span class="p">);</span> <span class="c1">// Creates a new HashService instance</span>
+
+<span class="kt">var</span> <span class="n">input</span> <span class="p">=</span> <span class="s">"Hello World"</span><span class="p">;</span>                   <span class="c1">// Sets the input text to "Hello World"</span>
+<span class="kt">var</span> <span class="n">output</span> <span class="p">=</span> <span class="n">hashService</span><span class="p">.</span><span class="n">Hash</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>        <span class="c1">// Gets the hashed value to output</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Input: {0}"</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Output: {0}"</span><span class="p">,</span> <span class="n">output</span><span class="p">);</span>
+
+<span class="c1">// Input: Hello World</span>
+<span class="c1">// Output: pZGm1Av0IEBKARczz7exkNYsZb8LzaMrV7J32a2fFG4=</span>
+</pre></div>
+
+<p>Please note that <strong>CryptoService</strong> does not put salt key for hashing. So it is your own responsibility to add any salt key before hashing.</p>
+
+<h3>
+<a name="symmetric-service" class="anchor" href="#symmetric-service"><span class="octicon octicon-link"></span></a>Symmetric Service</h3>
+
+<p>.NET framework provides five different symmetric algorithms, <code>Aes</code>, <code>DES</code>, <code>RC2</code>, <code>Rijndael</code> and <code>TripleDES</code>. <strong>CryptoService</strong> supports all those symmetric algorithms.</p>
+
+<div class="highlight highlight-c#"><pre><span class="kt">var</span> <span class="n">provider</span> <span class="p">=</span> <span class="n">SymmetricProvider</span><span class="p">.</span><span class="n">Aes</span>                   <span class="c1">// Sets the symmetric algorithm to Aes</span>
+<span class="kt">var</span> <span class="n">symmetricService</span> <span class="p">=</span> <span class="k">new</span> <span class="n">SymmetricService</span><span class="p">(</span><span class="n">provider</span><span class="p">);</span> <span class="c1">// Creates a new SymmetricService instance</span>
+<span class="n">symmetricService</span><span class="p">.</span><span class="n">Key</span> <span class="p">=</span> <span class="s">"KEY_VALUE"</span><span class="p">;</span>                    <span class="c1">// Sets the key value.</span>
+<span class="n">symmetricService</span><span class="p">.</span><span class="n">Vector</span> <span class="p">=</span> <span class="s">"VECTOR_VALUE"</span><span class="p">;</span>              <span class="c1">// Sets the vector value.</span>
+
+<span class="kt">var</span> <span class="n">input</span> <span class="p">=</span> <span class="s">"Hello World"</span><span class="p">;</span>                             <span class="c1">// Sets the input text to "Hello World"</span>
+<span class="kt">var</span> <span class="n">encrypted</span> <span class="p">=</span> <span class="n">symmetricService</span><span class="p">.</span><span class="n">Encrypt</span><span class="p">(</span><span class="n">input</span><span class="p">);</span>       <span class="c1">// Gets the encrypted value to encrypted</span>
+<span class="kt">var</span> <span class="n">decrypted</span> <span class="p">=</span> <span class="n">symmetricService</span><span class="p">.</span><span class="n">Decrypt</span><span class="p">(</span><span class="n">encrypted</span><span class="p">);</span>   <span class="c1">// Gets the decrypted value to decrypted</span>
+
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Input: {0}"</span><span class="p">,</span> <span class="n">input</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Encrypted: {0}"</span><span class="p">,</span> <span class="n">encrypted</span><span class="p">);</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">"Decrypted: {0}"</span><span class="p">,</span> <span class="n">decrypted</span><span class="p">);</span>
+
+<span class="c1">// Input: Hello World</span>
+<span class="c1">// Encrypted: bdwO/5C8a+pliIoIXtuzfA==</span>
+<span class="c1">// Decrypted: Hello World</span>
+</pre></div>
+
+<p>Depending on the symmetric algorithm chosen, the length of key and vector are different.</p>
+
+<ul>
+<li>
+<code>Aes</code>: 32/16</li>
+<li>
+<code>DES</code>: 8/8</li>
+<li>
+<code>RC2</code>: 16/8</li>
+<li>
+<code>Rijndael</code>: 32/16</li>
+<li>
+<code>TripleDES</code>: 24/8</li>
+</ul><p>Please note that <strong>CryptoService</strong> does not put salt key for encryption. So it is your own responsibility to add any salt key before encryption.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p><strong>CryptoService</strong> is released under the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<blockquote>
+<p>The MIT License (MIT)
+Copyright (c) 2013 <a href="http://aliencube.org">aliencube.org</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+</blockquote>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">CryptoService maintained by <a href="https://github.com/aliencube">aliencube</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
