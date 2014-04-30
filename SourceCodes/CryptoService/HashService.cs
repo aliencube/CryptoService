@@ -150,7 +150,7 @@ namespace Aliencube.CryptoService
         /// <param name="plainText">Unhashed plain text value.</param>
         /// <returns>Returns <c>True</c>, if both are equal to each other; otherwise returns <c>False</c>.</returns>
         /// <exception cref="ArgumentNullException">Thrown when either hashed value or plain text value is not provided.</exception>
-        public bool ValidateHashedStrings(string hashed, string plainText)
+        public bool ValidateHash(string hashed, string plainText)
         {
             if (String.IsNullOrWhiteSpace(hashed))
                 throw new ArgumentNullException("hashed");

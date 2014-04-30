@@ -181,7 +181,7 @@ namespace Aliencube.CryptoService.ConsoleApp
                 throw new ConfigurationErrorsException("Vector value has not been defined.");
 
             int validVectorLength;
-            if (!IsValidVector(key, provider, out validVectorLength))
+            if (!IsValidVector(vector, provider, out validVectorLength))
                 throw new FormatException(String.Format("PassPhrase.Vector must be {0} characters long.", validVectorLength));
 
             if (args.Count(p => !p.StartsWith("/")) > 0)
@@ -227,7 +227,11 @@ namespace Aliencube.CryptoService.ConsoleApp
                 }
             }
 
-            var service = new SymmetricService(provider);
+            var service = new SymmetricService(provider)
+                          {
+                              Key = key,
+                              Vector = vector
+                          };
             var sb = new StringBuilder();
             if (!String.IsNullOrWhiteSpace(text) &&
                 (String.IsNullOrWhiteSpace(filepath) || String.IsNullOrWhiteSpace(outputpath)))

@@ -25,6 +25,6 @@
         /// <param name="hashed">Hashed text value.</param>
         /// <param name="plainText">Unhashed plain text value.</param>
         /// <returns>Returns <c>True</c>, if both are equal to each other; otherwise returns <c>False</c>.</returns>
-        bool ValidateHashedStrings(string hashed, string plainText);
+        bool ValidateHash(string hashed, string plainText);
     }
 }

@@ -69,12 +69,14 @@ namespace Aliencube.CryptoService.UnitTests
         }
 
         [Test]
-        [TestCase(8)]
-        [TestCase(20)]
-        [TestCase(32)]
-        public void GetRandomString_GivenLength_ReturnRandomString(int length)
+        [TestCase("md5", 16)]
+        [TestCase("sha1", 16)]
+        [TestCase("sha256", 24)]
+        [TestCase("sha384", 24)]
+        [TestCase("sha512", 32)]
+        public void GetRandomString_GivenLength_ReturnRandomString(string provider, int length)
         {
-            this._hashService = new HashService("sha256");
+            this._hashService = new HashService(provider);
             var result = this._hashService.GenerateHash(length);
 
             Assert.IsTrue(!String.IsNullOrWhiteSpace(result));
@@ -82,13 +84,16 @@ namespace Aliencube.CryptoService.UnitTests
         }
 
         [Test]
-        [TestCase("test1")]
-        [TestCase("1234567890")]
-        public void GetHashedText_GivenPlainText_ReturnHashedText(string text)
+        [TestCase("md5", "Hello World")]
+        [TestCase("sha1", "Hello World")]
+        [TestCase("sha256", "Hello World")]
+        [TestCase("sha384", "Hello World")]
+        [TestCase("sha512", "Hello World")]
+        public void GetHashedText_GivenPlainText_ReturnHashedText(string provider, string text)
         {
-            this._hashService = new HashService("sha256");
+            this._hashService = new HashService(provider);
             var result = this._hashService.Hash(text);
-            var validated = this._hashService.ValidateHashedStrings(result, text);
+            var validated = this._hashService.ValidateHash(result, text);
 
             Assert.IsTrue(!String.IsNullOrWhiteSpace(result));
             Assert.IsTrue(validated);
