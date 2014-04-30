@@ -38,14 +38,14 @@
                                   })
                                  .ToArray();
                                  
-            $("#latest-library").append($("<li></li>").text(libraries[0]));
-            $("#latest-app").append($("<li></li>").text(apps[0]));
+            $("#latest-library").append($("<li></li>").append($("<a></a>").attr("href", libraries[0]).text(libraries[0].replace("downloads/", ""))));
+            $("#latest-app").append($("<li></li>").append($("<a></a>").attr("href", apps[0]).text(apps[0].replace("downloads/", ""))));
 
             Enumerable.From(libraries).Skip(1).ForEach(function(library, index) {
-                $("#archived-library").append($("<li></li>").text(library));
+                $("#archived-library").append($("<li></li>").append($("<a></a>").attr("href", library).text(library.replace("downloads/", ""))));
             });
             Enumerable.From(apps).Skip(1).ForEach(function(app, index) {
-                $("#archived-app").append($("<li></li>").text(app));
+                $("#archived-app").append($("<li></li>").append($("<a></a>").attr("href", app).text(app.replace("downloads/", ""))));
             });
         });
     };
