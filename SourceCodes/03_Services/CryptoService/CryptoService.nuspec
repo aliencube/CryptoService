@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package >
+    <metadata>
+        <id>Aliencube.CryptoService</id>
+        <version>1.0.0.0</version>
+        <title>Crypto Service</title>
+        <authors>Aliencube Community</authors>
+        <owners>aliencube</owners>
+        <licenseUrl>https://github.com/aliencube/CryptoService/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/aliencube/CryptoService</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>CryptoService provides one-way hash and two-way encryption and decryption services</description>
+        <copyright>Aliencube Community Copyright 2013</copyright>
+        <tags>Aliencube, Hash, Encryption, Decryption</tags>
+        <dependencies />
+    </metadata>
+    <files>
+        <file src="bin\Release\**\Aliencube.CryptoService.*" target="lib" />
+        <file src="..\..\02_Apps\CryptoService.ConsoleApp\bin\Release\**\*.*" target="tools" />
+    </files>
+</package>

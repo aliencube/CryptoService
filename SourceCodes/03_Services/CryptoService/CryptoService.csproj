@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B08D087E-EB23-4548-8300-F9D2E93337A8}</ProjectGuid>
+    <ProjectGuid>{E7CEE460-2222-49C2-A402-510A5F354DA6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aliencube.CryptoService.UnitTests</RootNamespace>
-    <AssemblyName>Aliencube.CryptoService.UnitTests</AssemblyName>
+    <RootNamespace>Aliencube.CryptoService</RootNamespace>
+    <AssemblyName>Aliencube.CryptoService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -30,30 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NSubstitute, Version=1.8.1.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NSubstitute.1.8.1.0\lib\net45\NSubstitute.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.core">
-      <HintPath>..\packages\NUnitTestAdapter.1.2\lib\nunit.core.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.core.interfaces">
-      <HintPath>..\packages\NUnitTestAdapter.1.2\lib\nunit.core.interfaces.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.util">
-      <HintPath>..\packages\NUnitTestAdapter.1.2\lib\nunit.util.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="NUnit.VisualStudio.TestAdapter">
-      <HintPath>..\packages\NUnitTestAdapter.1.2\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,21 +39,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Documents\Properties\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\..\Documents\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="SymmetricServiceTest.cs" />
-    <Compile Include="HashServiceTest.cs" />
+    <Compile Include="CryptoServiceBase.cs" />
+    <Compile Include="Interfaces\ICryptoServiceBase.cs" />
+    <Compile Include="Interfaces\ISymmetricService.cs" />
+    <Compile Include="SymmetricProvider.cs" />
+    <Compile Include="HashProvider.cs" />
+    <Compile Include="HashService.cs" />
+    <Compile Include="CryptoDirection.cs" />
+    <Compile Include="SymmetricService.cs" />
+    <Compile Include="Exceptions\InvalidDataLengthException.cs" />
+    <Compile Include="Exceptions\PropertyValueNotDefinedException.cs" />
+    <Compile Include="Interfaces\IHashService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CryptoService\CryptoService.csproj">
-      <Project>{e7cee460-2222-49c2-a402-510a5f354da6}</Project>
-      <Name>CryptoService</Name>
-    </ProjectReference>
+    <None Include="CryptoService.nuspec" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

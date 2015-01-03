@@ -3,29 +3,33 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService.ConsoleApp", "CryptoService.ConsoleApp\CryptoService.ConsoleApp.csproj", "{813FF112-FEBE-4F5E-B046-EA4FE58FC6AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService", "CryptoService\CryptoService.csproj", "{E7CEE460-2222-49C2-A402-510A5F354DA6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9C469A87-CA85-4598-9300-AD6223840F15}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00_Documents", "00_Documents", "{A574F105-DC06-4717-84EE-9B8BC3E20933}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01_Applications", "01_Applications", "{49F5501C-99EA-4EE5-A98C-D293473ECB52}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02_Services", "02_Services", "{DCFD4FB5-514E-48F7-AA26-E3A6C056734D}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99_Tests", "99_Tests", "{44C39059-930C-4E08-A46B-47D9A2F7D534}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Properties", "Properties", "{321A3872-DEFC-4565-94D2-05BA65568252}"
 	ProjectSection(SolutionItems) = preProject
 		..\Documents\Properties\SharedAssemblyInfo.cs = ..\Documents\Properties\SharedAssemblyInfo.cs
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService.UnitTests", "CryptoService.UnitTests\CryptoService.UnitTests.csproj", "{B08D087E-EB23-4548-8300-F9D2E93337A8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02_Apps", "02_Apps", "{49F5501C-99EA-4EE5-A98C-D293473ECB52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{9C469A87-CA85-4598-9300-AD6223840F15}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService.ConsoleApp", "02_Apps\CryptoService.ConsoleApp\CryptoService.ConsoleApp.csproj", "{813FF112-FEBE-4F5E-B046-EA4FE58FC6AE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "03_Services", "03_Services", "{DCFD4FB5-514E-48F7-AA26-E3A6C056734D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService", "03_Services\CryptoService\CryptoService.csproj", "{E7CEE460-2222-49C2-A402-510A5F354DA6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "99_Tests", "99_Tests", "{44C39059-930C-4E08-A46B-47D9A2F7D534}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CryptoService.UnitTests", "99_Tests\CryptoService.UnitTests\CryptoService.UnitTests.csproj", "{B08D087E-EB23-4548-8300-F9D2E93337A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01_Configs", "01_Configs", "{3179C3E7-3779-4C13-89B3-26CD81E602FC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04_Models", "04_Models", "{C94647EC-13FD-437F-B349-649A33E61B9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,9 +54,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{321A3872-DEFC-4565-94D2-05BA65568252} = {A574F105-DC06-4717-84EE-9B8BC3E20933}
 		{813FF112-FEBE-4F5E-B046-EA4FE58FC6AE} = {49F5501C-99EA-4EE5-A98C-D293473ECB52}
 		{E7CEE460-2222-49C2-A402-510A5F354DA6} = {DCFD4FB5-514E-48F7-AA26-E3A6C056734D}
-		{321A3872-DEFC-4565-94D2-05BA65568252} = {A574F105-DC06-4717-84EE-9B8BC3E20933}
 		{B08D087E-EB23-4548-8300-F9D2E93337A8} = {44C39059-930C-4E08-A46B-47D9A2F7D534}
 	EndGlobalSection
 EndGlobal

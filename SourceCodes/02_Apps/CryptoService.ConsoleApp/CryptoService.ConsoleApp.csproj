@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E7CEE460-2222-49C2-A402-510A5F354DA6}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{813FF112-FEBE-4F5E-B046-EA4FE58FC6AE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Aliencube.CryptoService</RootNamespace>
-    <AssemblyName>Aliencube.CryptoService</AssemblyName>
+    <RootNamespace>Aliencube.CryptoService.ConsoleApp</RootNamespace>
+    <AssemblyName>Aliencube.CryptoService.ConsoleApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,21 +42,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Documents\Properties\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\..\Documents\Properties\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CryptoServiceBase.cs" />
-    <Compile Include="Interfaces\ICryptoServiceBase.cs" />
-    <Compile Include="Interfaces\ISymmetricService.cs" />
-    <Compile Include="SymmetricProvider.cs" />
-    <Compile Include="HashProvider.cs" />
-    <Compile Include="HashService.cs" />
-    <Compile Include="CryptoDirection.cs" />
-    <Compile Include="SymmetricService.cs" />
-    <Compile Include="Exceptions\InvalidDataLengthException.cs" />
-    <Compile Include="Exceptions\PropertyValueNotDefinedException.cs" />
-    <Compile Include="Interfaces\IHashService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\03_Services\CryptoService\CryptoService.csproj">
+      <Project>{e7cee460-2222-49c2-a402-510a5f354da6}</Project>
+      <Name>CryptoService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
