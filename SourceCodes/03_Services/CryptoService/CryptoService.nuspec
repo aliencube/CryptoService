@@ -2,7 +2,7 @@
 <package >
     <metadata>
         <id>Aliencube.CryptoService</id>
-        <version>1.0.0.0</version>
+        <version>1.0.0.1</version>
         <title>Crypto Service</title>
         <authors>Aliencube Community</authors>
         <owners>aliencube</owners>
@@ -16,6 +16,6 @@
     </metadata>
     <files>
         <file src="bin\Release\**\Aliencube.CryptoService.*" target="lib" />
-        <file src="..\..\02_Apps\CryptoService.ConsoleApp\bin\Release\**\*.*" target="tools" />
+        <file src="..\..\02_Apps\CryptoService.ConsoleApp\bin\Release\**\*.*" target="content" />
     </files>
 </package>

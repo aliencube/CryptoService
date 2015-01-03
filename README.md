@@ -3,16 +3,9 @@
 **CryptoService** provides one-way hash and two-way encryption and decryption services.
 
 
-## Prerequisites ##
+## Package Status ##
 
-**CryptoService** requires the following to be installed on your box depending on your purpose of use:
-
-- [Micrisoft .NET Framework 4.5](http://www.microsoft.com/en-us/download/details.aspx?id=30653)
-
-
-## Download Builds ##
-
-Download pre-built application and library are available at this [download page](http://aliencube.github.io/CryptoService/downloads.html).
+* **[Aliencube.CryptoService](https://www.nuget.org/packages/Aliencube.CryptoService/)** [![](https://img.shields.io/nuget/v/Aliencube.CryptoService.svg)](https://www.nuget.org/packages/Aliencube.CryptoService/) [![](https://img.shields.io/nuget/dt/Aliencube.CryptoService.svg)](https://www.nuget.org/packages/Aliencube.CryptoService/)
 
 
 ## Getting Started &ndash; Console Application ##
@@ -40,6 +33,8 @@ In order to run **CryptoService** console app, a configuration file &ndash; `Ali
 
 In order to use **CryptoService** in your applications, simply copy `Aliencube.CryptoService.dll` to the application's `/bin` directory or reference `Aliencube.CryptoService.dll` to your application project.
 
+Alternatively, you can download the library from [NuGet](http://nuget.org). Its package URL is []()
+
 
 ### Hash Service ###
 
@@ -59,7 +54,7 @@ Console.WriteLine("Output: {0}", output);
 // Output: pZGm1Av0IEBKARczz7exkNYsZb8LzaMrV7J32a2fFG4=
 ```
 
-Please note that **CryptoService** does not put salt key for hashing. So it is your own responsibility to add any salt key before hashing.
+Please note that **CryptoService** does not put salt for hashing. So it is your own responsibility to add any salt before hashing.
 
 
 ### Symmetric Service ###
@@ -93,7 +88,7 @@ Depending on the symmetric algorithm chosen, the length of key and vector are di
 * `Rijndael`: 32/16
 * `TripleDES`: 24/8
 
-Please note that **CryptoService** does not put salt key for encryption. So it is your own responsibility to add any salt key before encryption.
+Please note that **CryptoService** does not put salt for encryption. So it is your own responsibility to add any salt before encryption.
 
 
 ## License ##
