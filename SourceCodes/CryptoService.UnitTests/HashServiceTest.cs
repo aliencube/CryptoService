@@ -1,8 +1,8 @@
-using Aliencube.CryptoService.Interfaces;
-using NUnit.Framework;
 using System;
 using System.Reflection;
 using System.Security.Cryptography;
+using Aliencube.CryptoService.Interfaces;
+using NUnit.Framework;
 
 namespace Aliencube.CryptoService.UnitTests
 {

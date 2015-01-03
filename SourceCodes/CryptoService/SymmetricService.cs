@@ -1,10 +1,10 @@
-﻿using Aliencube.CryptoService.Exceptions;
-using Aliencube.CryptoService.Interfaces;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using Aliencube.CryptoService.Exceptions;
+using Aliencube.CryptoService.Interfaces;
 
 namespace Aliencube.CryptoService
 {

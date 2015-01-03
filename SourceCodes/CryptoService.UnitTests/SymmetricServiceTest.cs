@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Text;
 using Aliencube.CryptoService.Interfaces;
 using NUnit.Framework;
 
@@ -19,7 +16,6 @@ namespace Aliencube.CryptoService.UnitTests
         [SetUp]
         public void Init()
         {
-            
         }
 
         [TearDown]
@@ -28,7 +24,7 @@ namespace Aliencube.CryptoService.UnitTests
             this._symmetricService.Dispose();
         }
 
-        #endregion
+        #endregion SetUp / TearDown
 
         #region Tests
 
@@ -88,18 +84,22 @@ namespace Aliencube.CryptoService.UnitTests
                     this._symmetricService.Key = hash.GenerateHash(32);
                     this._symmetricService.Vector = hash.GenerateHash(16);
                     break;
+
                 case "des":
                     this._symmetricService.Key = hash.GenerateHash(8);
                     this._symmetricService.Vector = hash.GenerateHash(8);
                     break;
+
                 case "rc2":
                     this._symmetricService.Key = hash.GenerateHash(16);
                     this._symmetricService.Vector = hash.GenerateHash(8);
                     break;
+
                 case "rijndael":
                     this._symmetricService.Key = hash.GenerateHash(32);
                     this._symmetricService.Vector = hash.GenerateHash(16);
                     break;
+
                 case "tripledes":
                     this._symmetricService.Key = hash.GenerateHash(24);
                     this._symmetricService.Vector = hash.GenerateHash(8);
@@ -115,6 +115,6 @@ namespace Aliencube.CryptoService.UnitTests
             Assert.AreEqual(text, decrypted);
         }
 
-        #endregion
+        #endregion Tests
     }
 }
