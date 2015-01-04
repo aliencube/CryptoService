@@ -16,6 +16,6 @@
     </metadata>
     <files>
         <file src="bin\Release\**\Aliencube.CryptoService.*" target="lib" />
-        <file src="..\..\02_Apps\CryptoService.ConsoleApp\bin\Release\**\*.*" target="content" />
+        <file src="..\..\02_Apps\CryptoService.ConsoleApp\bin\Release\**\*.*" target="tools" />
     </files>
 </package>
