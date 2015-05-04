@@ -23,7 +23,9 @@ namespace Aliencube.CryptoService
         public HashService(string provider)
         {
             if (String.IsNullOrWhiteSpace(provider))
+            {
                 throw new ArgumentNullException("provider");
+            }
 
             this._hashProvider = this.GetHashProvider(provider);
         }
@@ -47,7 +49,9 @@ namespace Aliencube.CryptoService
             get
             {
                 if (this._hashAlgorithm == null)
+                {
                     this._hashAlgorithm = this.GetHashAlgorithm(this._hashProvider);
+                }
 
                 return this._hashAlgorithm;
             }
@@ -62,7 +66,9 @@ namespace Aliencube.CryptoService
         private HashProvider GetHashProvider(string provider)
         {
             if (String.IsNullOrWhiteSpace(provider))
+            {
                 throw new ArgumentNullException("provider");
+            }
 
             HashProvider result;
             var hashProvider = Enum.TryParse(provider, true, out result) ? result : HashProvider.None;
@@ -115,7 +121,9 @@ namespace Aliencube.CryptoService
         public string GenerateHash(int length = 32)
         {
             if (length <= 0)
+            {
                 throw new ArgumentOutOfRangeException("length");
+            }
 
             string code;
             using (var rng = new RNGCryptoServiceProvider())
@@ -138,7 +146,9 @@ namespace Aliencube.CryptoService
         public string Hash(string value)
         {
             if (String.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentNullException("value");
+            }
 
             return this.Transform(value, CryptoDirection.Hash);
         }
@@ -153,10 +163,14 @@ namespace Aliencube.CryptoService
         public bool ValidateHash(string hashed, string plainText)
         {
             if (String.IsNullOrWhiteSpace(hashed))
+            {
                 throw new ArgumentNullException("hashed");
+            }
 
             if (String.IsNullOrWhiteSpace(plainText))
+            {
                 throw new ArgumentNullException("plainText");
+            }
 
             var validated = hashed == this.Hash(plainText);
             return validated;
@@ -173,10 +187,14 @@ namespace Aliencube.CryptoService
         public override string Transform(string value, CryptoDirection direction)
         {
             if (String.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentNullException("value");
+            }
 
             if (direction != CryptoDirection.Hash)
-                throw new InvalidEnumArgumentException("Only CryptoDirection.Hash is accepted");
+            {
+                throw new InvalidEnumArgumentException("Invalid CryptoDirection");
+            }
 
             var buffer = Encoding.UTF8.GetBytes(value);
             var computed = this.HashAlgorithm.ComputeHash(buffer);
@@ -193,10 +211,14 @@ namespace Aliencube.CryptoService
             base.Dispose();
 
             if (this._disposed)
+            {
                 return;
+            }
 
             if (this._hashAlgorithm != null)
+            {
                 this._hashAlgorithm.Dispose();
+            }
 
             this._disposed = true;
         }
