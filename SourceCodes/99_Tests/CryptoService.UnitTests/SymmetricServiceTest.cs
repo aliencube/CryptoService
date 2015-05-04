@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Security.Cryptography;
 using Aliencube.CryptoService.Interfaces;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Aliencube.CryptoService.UnitTests
@@ -9,8 +10,6 @@ namespace Aliencube.CryptoService.UnitTests
     [TestFixture]
     public class SymmetricServiceTest
     {
-        #region SetUp / TearDown
-
         private ISymmetricService _symmetricService;
 
         [SetUp]
@@ -21,26 +20,29 @@ namespace Aliencube.CryptoService.UnitTests
         [TearDown]
         public void Dispose()
         {
-            this._symmetricService.Dispose();
+            if (this._symmetricService != null)
+            {
+                this._symmetricService.Dispose();
+            }
         }
 
-        #endregion SetUp / TearDown
-
-        #region Tests
-
         [Test]
-        [TestCase("aes", true)]
-        [TestCase("des", true)]
-        [TestCase("rc2", true)]
-        [TestCase("rijndael", true)]
-        [TestCase("tripledes", true)]
-        [TestCase("other", false)]
-        public void GetSymmetricAlgorithm_GivenSymmetricProvider_ReturnSymmetricAlgorithm(string provider, bool expected)
+        [TestCase("aes")]
+        [TestCase("des")]
+        [TestCase("rc2")]
+        [TestCase("rijndael")]
+        [TestCase("tripledes")]
+        [TestCase("other")]
+        public void GivenSymmetricProvider_Should_ReturnSymmetricAlgorithm(string provider)
         {
-            this._symmetricService = new SymmetricService(provider);
+            SymmetricProvider result;
+            var symmetricProvider = Enum.TryParse(provider, true, out result) ? result : SymmetricProvider.None;
+
+            this._symmetricService = new SymmetricService(symmetricProvider);
             var type = this._symmetricService.GetType();
             var pi = type.GetProperty("SymmetricAlgorithm", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
-            Assert.IsNotNull(pi);
+
+            pi.Should().NotBeNull();
 
             SymmetricAlgorithm algorithm = null;
             switch (provider)
@@ -65,7 +67,15 @@ namespace Aliencube.CryptoService.UnitTests
                     algorithm = pi.GetValue(this._symmetricService) as TripleDESCryptoServiceProvider;
                     break;
             }
-            Assert.AreEqual(expected, algorithm != null);
+
+            if (symmetricProvider != SymmetricProvider.None)
+            {
+                algorithm.Should().NotBeNull();
+            }
+            else
+            {
+                algorithm.Should().BeNull();
+            }
         }
 
         [Test]
@@ -74,7 +84,7 @@ namespace Aliencube.CryptoService.UnitTests
         [TestCase("rc2", "RC2 TEST")]
         [TestCase("rijndael", "Rijndael TEST")]
         [TestCase("tripledes", "TripleDES TEST")]
-        public void GetEncryptedText_GivenPlainText_ReturnEncryptedText(string provider, string text)
+        public void GivenSymmetricProvideerAndPlainText_Should_ReturnEncryptedText(string provider, string text)
         {
             var hash = new HashService(HashProvider.SHA256);
             this._symmetricService = new SymmetricService(provider);
@@ -105,16 +115,15 @@ namespace Aliencube.CryptoService.UnitTests
                     this._symmetricService.Vector = hash.GenerateHash(8);
                     break;
             }
+
             var encrypted = this._symmetricService.Encrypt(text);
 
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(encrypted));
+            encrypted.Should().NotBeNullOrWhiteSpace();
 
             var decrypted = this._symmetricService.Decrypt(encrypted);
 
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(decrypted));
-            Assert.AreEqual(text, decrypted);
+            decrypted.Should().NotBeNullOrWhiteSpace();
+            decrypted.Should().Be(text);
         }
-
-        #endregion Tests
     }
 }
