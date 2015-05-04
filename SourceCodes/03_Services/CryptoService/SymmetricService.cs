@@ -44,7 +44,9 @@ namespace Aliencube.CryptoService
             get
             {
                 if (this._symmetricAlgorithm == null)
+                {
                     this._symmetricAlgorithm = this.GetSymmetricAlgorithm(this._symmetricProvider);
+                }
 
                 return this._symmetricAlgorithm;
             }
@@ -60,8 +62,10 @@ namespace Aliencube.CryptoService
             get { return this._key; }
             set
             {
-                if (!String.IsNullOrWhiteSpace(value) && this.SymmetricAlgorithm.Key.Length != value.Length)
-                    throw new InvalidDataLengthException(String.Format("Key must be length of {0}", this.SymmetricAlgorithm.Key.Length));
+                if (!this.CheckKeyVectorValue(value, this.SymmetricAlgorithm.Key.Length))
+                {
+                    throw new InvalidDataLengthException("Invalid key");
+                }
 
                 this._key = value;
             }
@@ -77,11 +81,34 @@ namespace Aliencube.CryptoService
             get { return this._vector; }
             set
             {
-                if (!String.IsNullOrWhiteSpace(value) && this.SymmetricAlgorithm.IV.Length != value.Length)
-                    throw new InvalidDataLengthException(String.Format("Vector must be length of {0}", this.SymmetricAlgorithm.IV.Length));
+                if (!this.CheckKeyVectorValue(value, this.SymmetricAlgorithm.IV.Length))
+                {
+                    throw new InvalidDataLengthException("Invalid vector");
+                }
 
                 this._vector = value;
             }
+        }
+
+        /// <summary>
+        /// Checks whether either key or vector value has a valid length or not.
+        /// </summary>
+        /// <param name="value">Key or vector value.</param>
+        /// <param name="expectedLength">Expected string length.</param>
+        /// <returns>Returns <c>True</c>, if either key or vector value has a valid length; otherwise returns <c>False</c>.</returns>
+        private bool CheckKeyVectorValue(string value, int expectedLength)
+        {
+            if (String.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            if (value.Length != expectedLength)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -93,7 +120,9 @@ namespace Aliencube.CryptoService
         private SymmetricProvider GetSymmetricProvider(string provider)
         {
             if (String.IsNullOrWhiteSpace(provider))
+            {
                 throw new ArgumentNullException("provider");
+            }
 
             SymmetricProvider result;
             var cryptoProvider = Enum.TryParse(provider, true, out result) ? result : SymmetricProvider.None;
@@ -146,7 +175,9 @@ namespace Aliencube.CryptoService
         public string Encrypt(string value)
         {
             if (String.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentNullException("value");
+            }
 
             string encrypted;
             try
@@ -169,7 +200,9 @@ namespace Aliencube.CryptoService
         public string Decrypt(string value)
         {
             if (String.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentNullException("value");
+            }
 
             string decrypted;
             try
@@ -195,16 +228,24 @@ namespace Aliencube.CryptoService
         public override string Transform(string value, CryptoDirection direction)
         {
             if (String.IsNullOrWhiteSpace(this.Key))
+            {
                 throw new PropertyValueNotDefinedException("Key has not been defined.");
+            }
 
             if (String.IsNullOrWhiteSpace(this.Vector))
+            {
                 throw new PropertyValueNotDefinedException("Vector has not been defined.");
+            }
 
             if (String.IsNullOrWhiteSpace(value))
+            {
                 throw new ArgumentNullException("value");
+            }
 
             if (direction == CryptoDirection.Unknown || direction == CryptoDirection.Hash)
-                throw new InvalidEnumArgumentException("Only CryptoDirection.Encrypt or CryptoDirection.Decrypt is accepted");
+            {
+                throw new InvalidEnumArgumentException("Invalid CryptoDirection");
+            }
 
             this.SymmetricAlgorithm.Key = Encoding.UTF8.GetBytes(this.Key);
             this.SymmetricAlgorithm.IV = Encoding.UTF8.GetBytes(this.Vector);
@@ -247,10 +288,14 @@ namespace Aliencube.CryptoService
             base.Dispose();
 
             if (this._disposed)
+            {
                 return;
+            }
 
             if (this._symmetricAlgorithm != null)
+            {
                 this._symmetricAlgorithm.Dispose();
+            }
 
             this._disposed = true;
         }
