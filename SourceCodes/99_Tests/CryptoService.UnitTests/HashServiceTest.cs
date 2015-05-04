@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using System.Security.Cryptography;
 using Aliencube.CryptoService.Interfaces;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Aliencube.CryptoService.UnitTests
@@ -9,8 +10,6 @@ namespace Aliencube.CryptoService.UnitTests
     [TestFixture]
     public class HashServiceTest
     {
-        #region SetUp / TearDown
-
         private IHashService _hashService;
 
         [SetUp]
@@ -21,26 +20,29 @@ namespace Aliencube.CryptoService.UnitTests
         [TearDown]
         public void Dispose()
         {
-            this._hashService.Dispose();
+            if (this._hashService != null)
+            {
+                this._hashService.Dispose();
+            }
         }
 
-        #endregion SetUp / TearDown
-
-        #region Tests
-
         [Test]
-        [TestCase("md5", true)]
-        [TestCase("sha1", true)]
-        [TestCase("sha256", true)]
-        [TestCase("sha384", true)]
-        [TestCase("sha512", true)]
-        [TestCase("other", false)]
-        public void GetHashAlgorithm_GivenHashProvider_ReturnHashAlgorithm(string provider, bool expected)
+        [TestCase("md5")]
+        [TestCase("sha1")]
+        [TestCase("sha256")]
+        [TestCase("sha384")]
+        [TestCase("sha512")]
+        [TestCase("other")]
+        public void GivenHashProvider_Should_ReturnHashAlgorithm(string provider)
         {
-            this._hashService = new HashService(provider);
+            HashProvider result;
+            var hashProvider = Enum.TryParse(provider, true, out result) ? result : HashProvider.None;
+
+            this._hashService = new HashService(hashProvider);
+
             var type = this._hashService.GetType();
             var pi = type.GetProperty("HashAlgorithm", BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
-            Assert.IsNotNull(pi);
+            pi.Should().NotBeNull();
 
             HashAlgorithm algorithm = null;
             switch (provider)
@@ -65,7 +67,15 @@ namespace Aliencube.CryptoService.UnitTests
                     algorithm = pi.GetValue(this._hashService) as SHA512CryptoServiceProvider;
                     break;
             }
-            Assert.AreEqual(expected, algorithm != null);
+
+            if (hashProvider != HashProvider.None)
+            {
+                algorithm.Should().NotBeNull();
+            }
+            else
+            {
+                algorithm.Should().BeNull();
+            }
         }
 
         [Test]
@@ -74,13 +84,13 @@ namespace Aliencube.CryptoService.UnitTests
         [TestCase("sha256", 24)]
         [TestCase("sha384", 24)]
         [TestCase("sha512", 32)]
-        public void GetRandomString_GivenLength_ReturnRandomString(string provider, int length)
+        public void GivenHashProviderAndLength_Should_ReturnRandomString(string provider, int length)
         {
             this._hashService = new HashService(provider);
             var result = this._hashService.GenerateHash(length);
 
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(result));
-            Assert.AreEqual(length, result.Length);
+            result.Should().NotBeNullOrWhiteSpace();
+            result.Length.Should().Be(length);
         }
 
         [Test]
@@ -89,16 +99,16 @@ namespace Aliencube.CryptoService.UnitTests
         [TestCase("sha256", "Hello World")]
         [TestCase("sha384", "Hello World")]
         [TestCase("sha512", "Hello World")]
-        public void GetHashedText_GivenPlainText_ReturnHashedText(string provider, string text)
+        public void GivenHashProviderAndPlainText_Should_ReturnHashedText(string provider, string text)
         {
             this._hashService = new HashService(provider);
             var result = this._hashService.Hash(text);
+
+            result.Should().NotBeNullOrWhiteSpace();
+
             var validated = this._hashService.ValidateHash(result, text);
 
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(result));
-            Assert.IsTrue(validated);
+            validated.Should().BeTrue();
         }
-
-        #endregion Tests
     }
 }
