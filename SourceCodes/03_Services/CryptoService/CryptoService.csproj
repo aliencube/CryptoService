@@ -30,7 +30,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aliencube.CaseInsensitiveEnumConverter, Version=1.0.0.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Aliencube.CaseInsensitiveEnumConverter.1.0.0.2\lib\net45\Aliencube.CaseInsensitiveEnumConverter.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,6 +48,8 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CryptoServiceBase.cs" />
+    <Compile Include="CryptoServiceSettings.cs" />
+    <Compile Include="Interfaces\ICryptoServiceSettings.cs" />
     <Compile Include="Interfaces\ICryptoServiceBase.cs" />
     <Compile Include="Interfaces\ISymmetricService.cs" />
     <Compile Include="SymmetricProvider.cs" />
@@ -58,6 +65,7 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="CryptoService.nuspec" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
